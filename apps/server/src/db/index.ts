@@ -1,11 +1,8 @@
-import { neon, neonConfig } from "@neondatabase/serverless";
-import { drizzle } from "drizzle-orm/neon-http";
-import ws from "ws";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-neonConfig.webSocketConstructor = ws;
+const connectionString = process.env.DATABASE_URL;
 
-// To work in edge environments (Cloudflare Workers, Vercel Edge, etc.), enable querying over fetch
-// neonConfig.poolQueryViaFetch = true
-
-const sql = neon(process.env.DATABASE_URL || "");
-export const db = drizzle(sql);
+// Disable prefetch as it is not supported for "Transaction" pool mode
+const client = postgres(connectionString as string, { prepare: false });
+export const db = drizzle(client);
