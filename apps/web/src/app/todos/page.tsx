@@ -13,14 +13,14 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { trpc } from "@/utils/trpc";
+import { orpc } from "@/utils/orpc";
 
 export default function TodosPage() {
   const [newTodoText, setNewTodoText] = useState("");
 
-  const todos = useQuery(trpc.todo.getAll.queryOptions());
+  const todos = useQuery(orpc.todo.getAll.queryOptions());
   const createMutation = useMutation(
-    trpc.todo.create.mutationOptions({
+    orpc.todo.create.mutationOptions({
       onSuccess: () => {
         todos.refetch();
         setNewTodoText("");
@@ -28,14 +28,14 @@ export default function TodosPage() {
     })
   );
   const toggleMutation = useMutation(
-    trpc.todo.toggle.mutationOptions({
+    orpc.todo.toggle.mutationOptions({
       onSuccess: () => {
         todos.refetch();
       },
     })
   );
   const deleteMutation = useMutation(
-    trpc.todo.delete.mutationOptions({
+    orpc.todo.delete.mutationOptions({
       onSuccess: () => {
         todos.refetch();
       },

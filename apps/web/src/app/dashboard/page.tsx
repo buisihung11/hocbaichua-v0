@@ -3,13 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { authClient } from "@/lib/auth-client";
-import { trpc } from "@/utils/trpc";
+import { orpc } from "@/utils/orpc";
 
 export default function Dashboard() {
   const router = useRouter();
   const { data: session, isPending } = authClient.useSession();
 
-  const privateData = useQuery(trpc.privateData.queryOptions());
+  const privateData = useQuery(orpc.privateData.queryOptions());
 
   useEffect(() => {
     if (!(session || isPending)) {
