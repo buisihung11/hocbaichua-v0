@@ -1,16 +1,16 @@
-import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
+import { protectedProcedure, publicProcedure } from "../lib/orpc";
 import { todoRouter } from "./todo";
 
-export const appRouter = router({
-  healthCheck: publicProcedure.query(() => {
+export const appRouter = {
+  healthCheck: publicProcedure.handler(() => {
     return "OK";
   }),
-  privateData: protectedProcedure.query(({ ctx }) => {
+  privateData: protectedProcedure.handler(({ context }) => {
     return {
       message: "This is private",
-      user: ctx.session.user,
+      user: context.session.user,
     };
   }),
   todo: todoRouter,
-});
+};
 export type AppRouter = typeof appRouter;

@@ -1,10 +1,13 @@
-import type { NextRequest } from "next/server";
+import { headers } from "next/headers";
 import { auth } from "./auth";
 
-export async function createContext(req: NextRequest) {
+export async function createContext() {
+  const headersData = await headers();
+
   const session = await auth.api.getSession({
-    headers: req.headers,
+    headers: headersData,
   });
+
   return {
     session,
   };

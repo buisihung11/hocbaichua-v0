@@ -2,16 +2,16 @@ import { eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../db";
 import { todo } from "../db/schema/todo";
-import { publicProcedure, router } from "../lib/trpc";
+import { publicProcedure } from "../lib/orpc";
 
-export const todoRouter = router({
-  getAll: publicProcedure.query(async () => {
+export const todoRouter = {
+  getAll: publicProcedure.handler(async () => {
     return await db.select().from(todo);
   }),
 
   create: publicProcedure
     .input(z.object({ text: z.string().min(1) }))
-    .mutation(async ({ input }) => {
+    .handler(async ({ input }) => {
       return await db.insert(todo).values({
         text: input.text,
       });
@@ -19,7 +19,7 @@ export const todoRouter = router({
 
   toggle: publicProcedure
     .input(z.object({ id: z.number(), completed: z.boolean() }))
-    .mutation(async ({ input }) => {
+    .handler(async ({ input }) => {
       return await db
         .update(todo)
         .set({ completed: input.completed })
@@ -28,7 +28,7 @@ export const todoRouter = router({
 
   delete: publicProcedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) => {
+    .handler(async ({ input }) => {
       return await db.delete(todo).where(eq(todo.id, input.id));
     }),
-});
+};
