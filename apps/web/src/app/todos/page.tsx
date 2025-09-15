@@ -27,6 +27,7 @@ const getAllTodosOptions = orpc.todo.getAll.queryOptions();
 export default function TodosPage() {
   const [newTodoText, setNewTodoText] = useState("");
   const [inputError, setInputError] = useState("");
+  const [pendingTodoIds, setPendingTodoIds] = useState<Set<number>>(new Set());
   const queryClient = useQueryClient();
 
   const todos = useQuery(getAllTodosOptions);
@@ -39,14 +40,22 @@ export default function TodosPage() {
         const previousTodos = queryClient.getQueryData(
           getAllTodosOptions.queryKey
         );
+
+        // Generate a unique temporary ID
+        const tempId = Date.now() + Math.random();
+
         queryClient.setQueryData(
           getAllTodosOptions.queryKey,
           (old: Todo[] | undefined) => [
             ...(old || []),
-            { id: Date.now(), text: variables.text, completed: false },
+            { id: tempId, text: variables.text, completed: false },
           ]
         );
-        return { previousTodos };
+
+        // Track this as a pending todo
+        setPendingTodoIds((prev) => new Set(prev).add(tempId));
+
+        return { previousTodos, tempId };
       },
       onError: (err, _variables, context) => {
         if (context?.previousTodos) {
@@ -54,6 +63,14 @@ export default function TodosPage() {
             getAllTodosOptions.queryKey,
             context.previousTodos
           );
+        }
+        // Remove from pending todos
+        if (context?.tempId) {
+          setPendingTodoIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(context.tempId);
+            return newSet;
+          });
         }
         // Show user-friendly error message
         const errorMessage =
@@ -67,8 +84,16 @@ export default function TodosPage() {
         });
         setInputError(errorMessage);
       },
-      onSuccess: () => {
+      onSuccess: (_data, _variables, context) => {
         setInputError(""); // Clear any previous errors
+        // Remove from pending todos when successful
+        if (context?.tempId) {
+          setPendingTodoIds((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(context.tempId);
+            return newSet;
+          });
+        }
       },
       onSettled: () => {
         queryClient.invalidateQueries({
@@ -202,7 +227,6 @@ export default function TodosPage() {
                 className={
                   inputError ? "border-red-500 focus:border-red-500" : ""
                 }
-                disabled={createMutation.isPending}
                 onChange={(e) => {
                   setNewTodoText(e.target.value);
                   if (inputError) {
@@ -216,15 +240,8 @@ export default function TodosPage() {
                 <p className="mt-1 text-red-600 text-sm">{inputError}</p>
               )}
             </div>
-            <Button
-              disabled={createMutation.isPending || !newTodoText.trim()}
-              type="submit"
-            >
-              {createMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Add"
-              )}
+            <Button disabled={!newTodoText.trim()} type="submit">
+              Add
             </Button>
           </form>
 
@@ -238,36 +255,46 @@ export default function TodosPage() {
           )}
           {!todos.isLoading && todos.data && todos.data.length > 0 && (
             <ul className="space-y-2">
-              {todos.data.map((todo) => (
-                <li
-                  className="flex items-center justify-between rounded-md border p-2"
-                  key={todo.id}
-                >
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      checked={todo.completed}
-                      id={`todo-${todo.id}`}
-                      onCheckedChange={() =>
-                        handleToggleTodo(todo.id, todo.completed)
-                      }
-                    />
-                    <label
-                      className={`${todo.completed ? "text-muted-foreground line-through" : ""}`}
-                      htmlFor={`todo-${todo.id}`}
-                    >
-                      {todo.text}
-                    </label>
-                  </div>
-                  <Button
-                    aria-label="Delete todo"
-                    onClick={() => handleDeleteTodo(todo.id)}
-                    size="icon"
-                    variant="ghost"
+              {todos.data.map((todo) => {
+                const isPending = pendingTodoIds.has(todo.id);
+                return (
+                  <li
+                    className={`flex items-center justify-between rounded-md border p-2 ${
+                      isPending ? "opacity-60" : ""
+                    }`}
+                    key={todo.id}
                   >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </li>
-              ))}
+                    <div className="flex items-center space-x-2">
+                      {isPending && (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      )}
+                      <Checkbox
+                        checked={todo.completed}
+                        disabled={isPending}
+                        id={`todo-${todo.id}`}
+                        onCheckedChange={() =>
+                          handleToggleTodo(todo.id, todo.completed)
+                        }
+                      />
+                      <label
+                        className={`${todo.completed ? "text-muted-foreground line-through" : ""}`}
+                        htmlFor={`todo-${todo.id}`}
+                      >
+                        {todo.text}
+                      </label>
+                    </div>
+                    <Button
+                      aria-label="Delete todo"
+                      disabled={isPending}
+                      onClick={() => handleDeleteTodo(todo.id)}
+                      size="icon"
+                      variant="ghost"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </CardContent>
