@@ -1,14 +1,30 @@
+import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { RPCHandler } from "@orpc/server/fetch";
 import type { NextRequest } from "next/server";
 import { createContext } from "@/lib/context";
 import { appRouter } from "@/routers";
 
-const handler = new RPCHandler(appRouter);
+const rpcHandler = new RPCHandler(appRouter);
+
+const openAPIHandler = new OpenAPIHandler(appRouter, {
+  plugins: [],
+});
 
 async function handleRequest(request: NextRequest) {
-  const { response } = await handler.handle(request, {
+  // Try OpenAPI handler first
+  const openAPIResult = await openAPIHandler.handle(request, {
     prefix: "/rpc",
-    context: await createContext(request),
+    context: await createContext(),
+  });
+
+  if (openAPIResult.matched) {
+    return openAPIResult.response;
+  }
+
+  // Fall back to RPC handler
+  const { response } = await rpcHandler.handle(request, {
+    prefix: "/rpc",
+    context: await createContext(),
   });
   return response ?? new Response("Not found", { status: 404 });
 }
