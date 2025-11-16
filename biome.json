@@ -24,6 +24,7 @@
   },
   "extends": [
     "ultracite/core",
-    "ultracite/react"
+    "ultracite/react",
+    "**/apps/**/routeTree.gen.ts"
   ]
 }
