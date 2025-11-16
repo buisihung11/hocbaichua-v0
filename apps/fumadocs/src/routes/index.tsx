@@ -1,21 +1,21 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { HomeLayout } from 'fumadocs-ui/layouts/home';
-import { baseOptions } from '@/lib/layout.shared';
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { HomeLayout } from "fumadocs-ui/layouts/home";
+import { baseOptions } from "@/lib/layout.shared";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: Home,
 });
 
 function Home() {
   return (
-    <HomeLayout {...baseOptions()} className="text-center py-32 justify-center">
-      <h1 className="font-medium text-xl mb-4">Fumadocs on Tanstack Start.</h1>
+    <HomeLayout {...baseOptions()} className="justify-center py-32 text-center">
+      <h1 className="mb-4 font-medium text-xl">Fumadocs on Tanstack Start.</h1>
       <Link
-        to="/docs/$"
+        className="mx-auto rounded-lg bg-fd-primary px-3 py-2 font-medium text-fd-primary-foreground text-sm"
         params={{
-          _splat: '',
+          _splat: "",
         }}
-        className="px-3 py-2 rounded-lg bg-fd-primary text-fd-primary-foreground font-medium text-sm mx-auto"
+        to="/docs/$"
       >
         Open Docs
       </Link>

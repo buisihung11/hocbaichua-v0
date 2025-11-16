@@ -1,47 +1,47 @@
-import { expo } from '@better-auth/expo';
-import { betterAuth, type BetterAuthOptions } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { polar, checkout, portal } from "@polar-sh/better-auth";
-import { polarClient } from "./lib/payments";
+import { expo } from "@better-auth/expo";
 import { db } from "@hocbaichua-v0/db";
 import * as schema from "@hocbaichua-v0/db/schema/auth";
+import { checkout, polar, portal } from "@polar-sh/better-auth";
+import { type BetterAuthOptions, betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { polarClient } from "./lib/payments";
 
 export const auth = betterAuth<BetterAuthOptions>({
-	database: drizzleAdapter(db, {
-		provider: "pg",
+  database: drizzleAdapter(db, {
+    provider: "pg",
 
-		schema: schema,
-	}),
-	trustedOrigins: [process.env.CORS_ORIGIN || "", "mybettertapp://", "exp://"],
-	emailAndPassword: {
-		enabled: true,
-	},
-	advanced: {
-		defaultCookieAttributes: {
-			sameSite: "none",
-			secure: true,
-			httpOnly: true,
-		},
-	},
-	plugins: [
-		polar({
-			client: polarClient,
-			createCustomerOnSignUp: true,
-			enableCustomerPortal: true,
-			use: [
-				checkout({
-					products: [
-						{
-							productId: "your-product-id",
-							slug: "pro",
-						},
-					],
-					successUrl: process.env.POLAR_SUCCESS_URL,
-					authenticatedUsersOnly: true,
-				}),
-				portal(),
-			],
-		}),
-    expo()
+    schema,
+  }),
+  trustedOrigins: [process.env.CORS_ORIGIN || "", "mybettertapp://", "exp://"],
+  emailAndPassword: {
+    enabled: true,
+  },
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      httpOnly: true,
+    },
+  },
+  plugins: [
+    polar({
+      client: polarClient,
+      createCustomerOnSignUp: true,
+      enableCustomerPortal: true,
+      use: [
+        checkout({
+          products: [
+            {
+              productId: "your-product-id",
+              slug: "pro",
+            },
+          ],
+          successUrl: process.env.POLAR_SUCCESS_URL,
+          authenticatedUsersOnly: true,
+        }),
+        portal(),
+      ],
+    }),
+    expo(),
   ],
 });

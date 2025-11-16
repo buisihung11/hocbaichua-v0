@@ -1,17 +1,17 @@
 {
-	"expo": {
-		"scheme": "hocbaichua-v0",
-		"userInterfaceStyle": "automatic",
-		"orientation": "default",
-		"web": {
-			"bundler": "metro"
-		},
-		"name": "hocbaichua-v0",
-		"slug": "hocbaichua-v0",
-		"plugins": ["expo-font"],
-		"experiments": {
-			"typedRoutes": true,
-			"reactCompiler": true
-		}
-	}
+  "expo": {
+    "scheme": "hocbaichua-v0",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "bundler": "metro"
+    },
+    "name": "hocbaichua-v0",
+    "slug": "hocbaichua-v0",
+    "plugins": ["expo-font"],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
 }
