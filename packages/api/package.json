@@ -1,0 +1,36 @@
+{
+  "name": "@hocbaichua-v0/api",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsdown"
+  },
+  "devDependencies": {
+    "tsdown": "catalog:",
+    "@hocbaichua-v0/config": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@trpc/server": "catalog:",
+    "@trpc/client": "catalog:",
+    "hono": "catalog:",
+    "drizzle-orm": "catalog:",
+    "ai": "catalog:",
+    "@ai-sdk/google": "catalog:",
+    "dotenv": "catalog:",
+    "zod": "catalog:",
+    "@hocbaichua-v0/auth": "workspace:*",
+    "@hocbaichua-v0/db": "workspace:*"
+  }
+}
