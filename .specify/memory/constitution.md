@@ -1,50 +1,133 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+SYNC IMPACT REPORT - Constitution Update to v1.0.0
+====================================================
+Version Change: INITIAL → v1.0.0
+Ratification: 2025-11-16 (initial adoption)
+
+DEFINED PRINCIPLES:
+- I. User-Centric AI Quality (accuracy, reliability, appropriate AI model usage)
+- II. Educational Integrity (academic honesty, transparent AI limitations)
+- III. Type Safety & Accessibility (TypeScript-first, WCAG compliance)
+- IV. Testing & Validation (test-first for critical paths, AI output validation)
+- V. Privacy & Data Protection (student data minimization, compliance)
+
+DEFINED SECTIONS:
+- Technical Standards (monorepo structure, React 19, tRPC type safety)
+- Development Workflow (feature branches, code review, quality gates)
+- Governance (amendment process, compliance verification)
+
+TEMPLATES REQUIRING UPDATES:
+✅ plan-template.md - Constitution Check section aligns with new principles
+✅ spec-template.md - User scenarios and requirements align with AI quality and educational integrity
+✅ tasks-template.md - Task categorization supports testing, accessibility, and AI validation
+✅ checklist-template.md - Generic template, no specific updates needed
+
+FOLLOW-UP ACTIONS: None - all placeholders resolved
+-->
+
+# HocBaiChua Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. User-Centric AI Quality
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every AI-generated feature (quiz, flashcard, summary) MUST prioritize accuracy and educational value over speed or convenience. AI outputs MUST be validated for correctness and pedagogical appropriateness before presentation to students. Model selection MUST be justified based on task requirements (e.g., factual accuracy for summarization, creativity for diverse quiz questions).
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rationale**: Students rely on this tool for learning. Inaccurate or misleading AI-generated content directly undermines educational outcomes and trust.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. Educational Integrity
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+The application MUST clearly distinguish between AI-generated content and student work. AI assistance MUST be designed to enhance learning, not enable academic dishonesty. Features MUST include transparency about AI limitations and encourage critical thinking over blind acceptance of generated content.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Educational tools bear responsibility for fostering genuine learning and maintaining academic standards. Students must understand when they are using AI assistance.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Type Safety & Accessibility
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+All code MUST be TypeScript-first with explicit types for API boundaries, database schemas, and AI model inputs/outputs. User interfaces MUST meet WCAG 2.1 Level AA accessibility standards. Components MUST be keyboard-navigable and screen-reader compatible.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale**: Type safety prevents runtime errors that could corrupt student data or learning progress. Accessibility ensures all students can benefit from the tool regardless of abilities.
+
+### IV. Testing & Validation (Critical Paths)
+
+Test-first development is MANDATORY for: (1) AI output validation logic, (2) user data persistence and retrieval, (3) quiz/flashcard generation algorithms, and (4) authentication flows. Tests MUST be written, approved by stakeholders, verified to fail, then implemented. Integration tests REQUIRED for AI model API contracts and database schema changes.
+
+**Rationale**: These critical paths directly impact learning outcomes and data integrity. Bugs in these areas cause immediate harm to users.
+
+### V. Privacy & Data Protection
+
+Student data collection MUST be minimized to only what is necessary for core functionality. User-uploaded documents and study materials MUST be processed securely with explicit user consent. AI model providers MUST NOT retain student data beyond request processing. Compliance with educational data privacy standards (FERPA/COPPA where applicable) is MANDATORY.
+
+**Rationale**: Students entrust the application with sensitive academic materials and personal learning data. Privacy violations erode trust and may violate legal requirements.
+
+## Technical Standards
+
+**Monorepo Structure**: Turborepo-managed workspace with clear separation:
+
+- `apps/web` - React 19 + TanStack Start for web UI
+- `apps/native` - React Native + Expo for mobile
+- `apps/server` - Hono API server
+- `packages/api` - tRPC routers and business logic
+- `packages/auth` - Better-Auth authentication
+- `packages/db` - Drizzle ORM schemas (PostgreSQL)
+
+**AI Integration Standards**:
+
+- All AI model calls MUST use typed SDK clients (`@ai-sdk/google` or equivalent)
+- Model responses MUST be validated against Zod schemas before use
+- Error handling MUST gracefully degrade when AI services are unavailable
+- Rate limiting and cost monitoring REQUIRED for production AI endpoints
+
+**Code Quality Enforcement**:
+
+- Biome (via Ultracite preset) for linting and formatting
+- Husky pre-commit hooks for automated checks
+- TypeScript strict mode enabled across all packages
+- tRPC for end-to-end type safety between client and server
+
+## Development Workflow
+
+**Feature Development Process**:
+
+1. Feature specification in `/specs/[###-feature-name]/spec.md` with user stories prioritized by educational impact
+2. Implementation plan in `/specs/[###-feature-name]/plan.md` with Constitution Check gate
+3. Test-first implementation for critical paths (Principle IV)
+4. Code review verifying accessibility (Principle III) and AI quality checks (Principle I)
+5. User acceptance testing with educational stakeholders
+
+**Quality Gates** (MUST pass before merge):
+
+- Constitution Check for principles compliance (automated checklist)
+- Type checking (`bun run check-types`)
+- Linting/formatting (`npx ultracite check`)
+- Critical path tests passing (AI validation, auth, data persistence)
+- Accessibility audit for UI changes (automated + manual review)
+
+**Branch Strategy**:
+
+- Feature branches: `###-feature-name` format
+- All work tracked via spec documents before code changes
+- Squash merges to main after approval
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+**Amendment Process**:
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. Proposed changes documented with rationale and impact analysis
+2. Review by project maintainers and educational stakeholders
+3. Version bump per semantic versioning:
+   - **MAJOR**: Principle removal/redefinition or breaking governance changes
+   - **MINOR**: New principle added or section materially expanded
+   - **PATCH**: Clarifications, wording fixes, non-semantic updates
+4. Update all dependent templates and documentation before ratification
+5. Migration plan required for changes affecting existing features
+
+**Compliance Verification**:
+
+- Constitution Check section MANDATORY in all plan.md files
+- Code reviews MUST verify principle adherence (documented in PR comments)
+- Quarterly constitution review to assess relevance and effectiveness
+- User feedback channels for reporting educational integrity or privacy concerns
+
+**Authority**: This constitution supersedes all other development practices when conflicts arise. Complexity or principle deviations MUST be explicitly justified in documentation and approved by maintainers.
+
+**Version**: 1.0.0 | **Ratified**: 2025-11-16 | **Last Amended**: 2025-11-16
