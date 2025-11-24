@@ -1,0 +1,11 @@
+# Trigger.dev
+.trigger
+
+# Dependencies
+node_modules
+
+# Environment
+.env.local
+
+# Build output
+dist

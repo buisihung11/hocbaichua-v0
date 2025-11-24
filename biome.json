@@ -23,5 +23,23 @@
       "!**/apps/**/routeTree.gen.ts"
     ]
   },
-  "extends": ["ultracite/core", "ultracite/react"]
+  "extends": ["ultracite/core", "ultracite/react"],
+  "linter": {
+    "rules": {
+      "performance": {
+        "noNamespaceImport": "warn",
+        "noDynamicNamespaceImportAccess": "warn",
+        "noBarrelFile": "warn"
+      },
+      "style": {
+        "useFilenamingConvention": "off"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
+      "nursery": {
+        "noShadow": "warn"
+      }
+    }
+  }
 }

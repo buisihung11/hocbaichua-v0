@@ -1,5 +1,7 @@
 import { protectedProcedure, publicProcedure, router } from "../index";
+import { spaceRouter } from "./space";
 import { todoRouter } from "./todo";
+import { uploadRouter } from "./upload";
 
 export const appRouter = router({
   healthCheck: publicProcedure.query(() => "OK"),
@@ -8,5 +10,7 @@ export const appRouter = router({
     user: ctx.session.user,
   })),
   todo: todoRouter,
+  upload: uploadRouter,
+  space: spaceRouter,
 });
 export type AppRouter = typeof appRouter;

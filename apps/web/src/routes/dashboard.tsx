@@ -1,10 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { createFileRoute } from "@tanstack/react-router";
+import { ChartAreaInteractive } from "@/components/chart-area-interactive";
+import { DataTable } from "@/components/data-table";
+import { SectionCards } from "@/components/section-cards";
+import data from "@/data/dashboard/data.json";
 import { getPayment } from "@/functions/get-payment";
 import { getUser } from "@/functions/get-user";
-import { authClient } from "@/lib/auth-client";
-import { useTRPC } from "@/utils/trpc";
 
 export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
@@ -13,48 +13,27 @@ export const Route = createFileRoute("/dashboard")({
     const customerState = await getPayment();
     return { session, customerState };
   },
-  loader: ({ context }) => {
-    if (!context.session) {
-      throw redirect({
-        to: "/login",
-      });
-    }
+  loader: () => {
+    // if (!context.session) {
+    //   throw redirect({
+    //     to: "/login",
+    //   });
+    // }
   },
 });
 
 function RouteComponent() {
-  const { session, customerState } = Route.useRouteContext();
-
-  const trpc = useTRPC();
-  const privateData = useQuery(trpc.privateData.queryOptions());
-
-  const hasProSubscription =
-    (customerState?.activeSubscriptions?.length ?? 0) > 0;
-  // For debugging: console.log("Active subscriptions:", customerState?.activeSubscriptions);
-
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <p>Welcome {session?.user.name}</p>
-      <p>API: {privateData.data?.message}</p>
-      <p>Plan: {hasProSubscription ? "Pro" : "Free"}</p>
-      {hasProSubscription ? (
-        <Button
-          onClick={async function handlePortal() {
-            await authClient.customer.portal();
-          }}
-        >
-          Manage Subscription
-        </Button>
-      ) : (
-        <Button
-          onClick={async function handleUpgrade() {
-            await authClient.checkout({ slug: "pro" });
-          }}
-        >
-          Upgrade to Pro
-        </Button>
-      )}
+    <div className="flex flex-1 flex-col">
+      <div className="@container/main flex flex-1 flex-col gap-2">
+        <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
+          <SectionCards />
+          <div className="px-4 lg:px-6">
+            <ChartAreaInteractive />
+          </div>
+          <DataTable data={data} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,9 @@
+{
+  "extends": "@hocbaichua-v0/config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src", "trigger.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}
