@@ -1,2 +1,8 @@
 [install]
-linker = "isolated"
+# Use "hoisted" to ensure single instances of shared dependencies across workspace
+# This prevents TypeScript type conflicts in monorepo builds (Vercel, CI/CD)
+# Critical for packages with type definitions (drizzle-orm, react, etc.)
+linker = "hoisted"
+
+# Optional: Enable exact versions to prevent version drift
+exact = false
