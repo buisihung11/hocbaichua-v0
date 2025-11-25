@@ -13,4 +13,7 @@ export default defineConfig({
     nitro(),
     viteReact(),
   ],
+  ssr: {
+    noExternal: ["@tabler/icons-react"],
+  },
 });
