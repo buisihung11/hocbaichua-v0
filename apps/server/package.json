@@ -26,9 +26,10 @@
     "supabase"
   ],
   "devDependencies": {
-    "typescript": "catalog:",
+    "@hocbaichua-v0/config": "workspace:*",
     "@types/bun": "^1.2.6",
+    "@types/node": "^24.10.1",
     "tsdown": "catalog:",
-    "@hocbaichua-v0/config": "workspace:*"
+    "typescript": "catalog:"
   }
 }
