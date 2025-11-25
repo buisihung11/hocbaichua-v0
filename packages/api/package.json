@@ -22,15 +22,18 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@trpc/server": "catalog:",
-    "@trpc/client": "catalog:",
-    "hono": "catalog:",
-    "drizzle-orm": "catalog:",
-    "ai": "catalog:",
     "@ai-sdk/google": "catalog:",
-    "dotenv": "catalog:",
-    "zod": "catalog:",
     "@hocbaichua-v0/auth": "workspace:*",
-    "@hocbaichua-v0/db": "workspace:*"
+    "@hocbaichua-v0/db": "workspace:*",
+    "@hocbaichua-v0/upload": "workspace:*",
+    "@trpc/client": "catalog:",
+    "@trpc/server": "catalog:",
+    "ai": "catalog:",
+    "dotenv": "catalog:",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "nanoid": "^5.1.6",
+    "uploadthing": "^7.7.4",
+    "zod": "catalog:"
   }
 }
