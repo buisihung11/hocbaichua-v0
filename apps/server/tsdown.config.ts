@@ -5,5 +5,6 @@ export default defineConfig({
   format: "esm",
   outDir: "./dist",
   clean: true,
-  noExternal: [/@hocbaichua-v0\/.*/],
+  // Don't bundle workspace packages - let them be resolved at runtime
+  external: [/@hocbaichua-v0\/.*/, "nanoid", "drizzle-orm", "postgres"],
 });
