@@ -20,7 +20,8 @@
     "zod": "catalog:",
     "@hocbaichua-v0/api": "workspace:*",
     "@hocbaichua-v0/auth": "workspace:*",
-    "@hocbaichua-v0/db": "workspace:*"
+    "@hocbaichua-v0/db": "workspace:*",
+    "@hocbaichua-v0/upload": "workspace:*"
   },
   "trustedDependencies": [
     "supabase"
