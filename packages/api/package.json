@@ -2,20 +2,15 @@
   "name": "@hocbaichua-v0/api",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
     "./*": {
-      "types": "./dist/*.d.ts",
       "default": "./src/*.ts"
     }
   },
   "type": "module",
-  "scripts": {
-    "build": "tsdown"
-  },
+  "scripts": {},
   "devDependencies": {
-    "tsdown": "catalog:",
     "@hocbaichua-v0/config": "workspace:*"
   },
   "peerDependencies": {

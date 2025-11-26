@@ -1,21 +1,15 @@
 {
   "name": "@hocbaichua-v0/upload",
-  "private": true,
-  "version": "0.0.0",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
     },
     "./*": {
-      "types": "./dist/*.d.ts",
       "default": "./src/*.ts"
     }
   },
-  "scripts": {
-    "build": "tsdown"
-  },
+  "scripts": {},
   "dependencies": {
     "uploadthing": "^7.3.3",
     "tus-js-client": "^4.2.3",
@@ -25,7 +19,6 @@
     "@aws-sdk/s3-request-presigner": "^3.699.0"
   },
   "devDependencies": {
-    "tsdown": "catalog:",
     "@hocbaichua-v0/config": "workspace:*"
   }
 }
