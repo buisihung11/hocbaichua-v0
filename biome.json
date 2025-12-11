@@ -32,13 +32,17 @@
         "noBarrelFile": "warn"
       },
       "style": {
-        "useFilenamingConvention": "off"
+        "useFilenamingConvention": "off",
+        "useBlockStatements": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "warn"
       },
       "nursery": {
         "noShadow": "warn"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn"
       }
     }
   }

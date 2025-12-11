@@ -13,15 +13,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getUser } from "@/functions/get-user";
 import { useTRPC } from "@/utils/trpc";
 
-export const Route = createFileRoute("/spaces/")({
+export const Route = createFileRoute("/app/spaces/")({
   component: SpacesRoute,
-  beforeLoad: async () => {
-    const session = await getUser();
-    return { session };
-  },
 });
 
 function SpacesRoute() {
@@ -31,11 +26,11 @@ function SpacesRoute() {
   const { data: spaces, isLoading } = useQuery(trpc.space.list.queryOptions());
 
   const handleSpaceClick = (spaceId: string) => {
-    navigate({ to: "/spaces/$spaceId", params: { spaceId } });
+    navigate({ to: "/app/spaces/$spaceId", params: { spaceId } });
   };
 
   const handleCreateSuccess = (spaceId: string) => {
-    navigate({ to: "/spaces/$spaceId", params: { spaceId } });
+    navigate({ to: "/app/spaces/$spaceId", params: { spaceId } });
   };
 
   if (isLoading) {

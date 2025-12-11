@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import {
   BarChart3,
   BookOpen,
@@ -41,10 +41,15 @@ import {
 import { getUser } from "@/functions/get-user";
 import { useTRPC } from "@/utils/trpc";
 
-export const Route = createFileRoute("/spaces/$spaceId")({
+export const Route = createFileRoute("/app/spaces/$spaceId")({
   component: SpaceDetailRoute,
   beforeLoad: async () => {
     const session = await getUser();
+    if (!session) {
+      throw redirect({
+        to: "/login",
+      });
+    }
     return { session };
   },
 });

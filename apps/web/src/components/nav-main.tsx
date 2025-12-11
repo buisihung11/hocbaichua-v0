@@ -14,7 +14,7 @@ export function NavMain({
 }: {
   items: {
     title: string;
-    url: string;
+    linkOptions?: Parameters<typeof Link>[0];
     icon?: Icon;
   }[];
 }) {
@@ -43,7 +43,7 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <Link className="w-full" to={item.url}>
+              <Link className="w-full" {...item.linkOptions}>
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>

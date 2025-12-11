@@ -1,14 +1,24 @@
 import { useChat } from "@ai-sdk/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { DefaultChatTransport } from "ai";
 import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Response } from "@/components/response";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getUser } from "@/functions/get-user";
 
-export const Route = createFileRoute("/ai")({
+export const Route = createFileRoute("/app/ai")({
   component: RouteComponent,
+  beforeLoad: async () => {
+    const session = await getUser();
+    if (!session) {
+      throw redirect({
+        to: "/login",
+      });
+    }
+    return { session };
+  },
 });
 
 function RouteComponent() {

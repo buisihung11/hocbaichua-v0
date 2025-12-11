@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,10 +12,20 @@ import {
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { getUser } from "@/functions/get-user";
 import { useTRPC } from "@/utils/trpc";
 
-export const Route = createFileRoute("/todos")({
+export const Route = createFileRoute("/app/todos")({
   component: TodosRoute,
+  beforeLoad: async () => {
+    const session = await getUser();
+    if (!session) {
+      throw redirect({
+        to: "/login",
+      });
+    }
+    return { session };
+  },
 });
 
 function TodosRoute() {

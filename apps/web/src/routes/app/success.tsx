@@ -1,6 +1,6 @@
 import { createFileRoute, useSearch } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/success")({
+export const Route = createFileRoute("/app/success")({
   component: SuccessPage,
   validateSearch: (search) => ({
     checkout_id: search.checkout_id as string,

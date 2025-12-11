@@ -10,12 +10,30 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
 
 ## Upload documents
 
-- [ ] Implement document upload API
-  - [ ] Using Supabase storage for file storage
-  - [ ] Store document metadata in PostgreSQL
-- [ ] Create web UI for document upload
+- [x] Implement document upload API
+  - [x] Using Supabase storage for file storage
+  - [x] Store document metadata in PostgreSQL
+- [x] Create web UI for document upload
 
-- [ ] Implement authentication with Better-Auth
+## Authention & Authorization
+
+- [x] Implement authentication with Better-Auth
+- [x] Add check authentication for private route
+- [x] Add user information in context
+- [x] Update the Space API
+- [x] Update the Upload API
+
+## Extract data to Vector DB
+
+- [ ] Research vector DB options (e.g., Pinecone, Weaviate, Supabase Vector)
+- [ ] Implement data extraction and storage in vector DB with trigger dev
+- [ ] Trigger the extract task in Upload API
+
+## Simple Chat Function
+
+- [ ] Implement simple chat interface in web app
+- [ ] Implement Q&A ai with Langchain & AI SDK
+- [ ] Implement query with vector DB
 
 ## Features
 

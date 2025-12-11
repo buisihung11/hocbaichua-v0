@@ -11,6 +11,10 @@ export async function createContext({ context }: CreateContextOptions) {
   });
   return {
     session,
+    // Helper utilities for easier user access
+    user: session?.user ?? null,
+    userId: session?.user?.id ?? null,
+    isAuthenticated: !!session,
   };
 }
 

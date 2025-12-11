@@ -9,201 +9,211 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TodosRouteImport } from './routes/todos'
-import { Route as SuccessRouteImport } from './routes/success'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as AiRouteImport } from './routes/ai'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as SpacesIndexRouteImport } from './routes/spaces/index'
-import { Route as SpacesSpaceIdRouteImport } from './routes/spaces/$spaceId'
+import { Route as AppRouteRouteImport } from './routes/app/route'
+import { Route as AppTodosRouteImport } from './routes/app/todos'
+import { Route as AppSuccessRouteImport } from './routes/app/success'
+import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
+import { Route as AppAiRouteImport } from './routes/app/ai'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as AppSpacesIndexRouteImport } from './routes/app/spaces/index'
+import { Route as AppSpacesSpaceIdRouteImport } from './routes/app/spaces/$spaceId'
 
-const TodosRoute = TodosRouteImport.update({
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppTodosRoute = AppTodosRouteImport.update({
   id: '/todos',
   path: '/todos',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const SuccessRoute = SuccessRouteImport.update({
+const AppSuccessRoute = AppSuccessRouteImport.update({
   id: '/success',
   path: '/success',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppAiRoute = AppAiRouteImport.update({
+  id: '/ai',
+  path: '/ai',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AiRoute = AiRouteImport.update({
-  id: '/ai',
-  path: '/ai',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SpacesIndexRoute = SpacesIndexRouteImport.update({
+const AppSpacesIndexRoute = AppSpacesIndexRouteImport.update({
   id: '/spaces/',
   path: '/spaces/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
-const SpacesSpaceIdRoute = SpacesSpaceIdRouteImport.update({
+const AppSpacesSpaceIdRoute = AppSpacesSpaceIdRouteImport.update({
   id: '/spaces/$spaceId',
   path: '/spaces/$spaceId',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AppRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/ai': typeof AiRoute
-  '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
-  '/success': typeof SuccessRoute
-  '/todos': typeof TodosRoute
-  '/spaces/$spaceId': typeof SpacesSpaceIdRoute
-  '/spaces': typeof SpacesIndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/login': typeof authLoginRoute
+  '/app/ai': typeof AppAiRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/success': typeof AppSuccessRoute
+  '/app/todos': typeof AppTodosRoute
+  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRoute
+  '/app/spaces': typeof AppSpacesIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/ai': typeof AiRoute
-  '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
-  '/success': typeof SuccessRoute
-  '/todos': typeof TodosRoute
-  '/spaces/$spaceId': typeof SpacesSpaceIdRoute
-  '/spaces': typeof SpacesIndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/login': typeof authLoginRoute
+  '/app/ai': typeof AppAiRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/success': typeof AppSuccessRoute
+  '/app/todos': typeof AppTodosRoute
+  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRoute
+  '/app/spaces': typeof AppSpacesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/ai': typeof AiRoute
-  '/dashboard': typeof DashboardRoute
-  '/login': typeof LoginRoute
-  '/success': typeof SuccessRoute
-  '/todos': typeof TodosRoute
-  '/spaces/$spaceId': typeof SpacesSpaceIdRoute
-  '/spaces/': typeof SpacesIndexRoute
+  '/app': typeof AppRouteRouteWithChildren
+  '/(auth)/login': typeof authLoginRoute
+  '/app/ai': typeof AppAiRoute
+  '/app/dashboard': typeof AppDashboardRoute
+  '/app/success': typeof AppSuccessRoute
+  '/app/todos': typeof AppTodosRoute
+  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRoute
+  '/app/spaces/': typeof AppSpacesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/ai'
-    | '/dashboard'
+    | '/app'
     | '/login'
-    | '/success'
-    | '/todos'
-    | '/spaces/$spaceId'
-    | '/spaces'
+    | '/app/ai'
+    | '/app/dashboard'
+    | '/app/success'
+    | '/app/todos'
+    | '/app/spaces/$spaceId'
+    | '/app/spaces'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/ai'
-    | '/dashboard'
+    | '/app'
     | '/login'
-    | '/success'
-    | '/todos'
-    | '/spaces/$spaceId'
-    | '/spaces'
+    | '/app/ai'
+    | '/app/dashboard'
+    | '/app/success'
+    | '/app/todos'
+    | '/app/spaces/$spaceId'
+    | '/app/spaces'
   id:
     | '__root__'
-    | '/'
-    | '/ai'
-    | '/dashboard'
-    | '/login'
-    | '/success'
-    | '/todos'
-    | '/spaces/$spaceId'
-    | '/spaces/'
+    | '/app'
+    | '/(auth)/login'
+    | '/app/ai'
+    | '/app/dashboard'
+    | '/app/success'
+    | '/app/todos'
+    | '/app/spaces/$spaceId'
+    | '/app/spaces/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AiRoute: typeof AiRoute
-  DashboardRoute: typeof DashboardRoute
-  LoginRoute: typeof LoginRoute
-  SuccessRoute: typeof SuccessRoute
-  TodosRoute: typeof TodosRoute
-  SpacesSpaceIdRoute: typeof SpacesSpaceIdRoute
-  SpacesIndexRoute: typeof SpacesIndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  authLoginRoute: typeof authLoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/todos': {
-      id: '/todos'
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/todos': {
+      id: '/app/todos'
       path: '/todos'
-      fullPath: '/todos'
-      preLoaderRoute: typeof TodosRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/todos'
+      preLoaderRoute: typeof AppTodosRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/success': {
-      id: '/success'
+    '/app/success': {
+      id: '/app/success'
       path: '/success'
-      fullPath: '/success'
-      preLoaderRoute: typeof SuccessRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/success'
+      preLoaderRoute: typeof AppSuccessRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/login': {
-      id: '/login'
+    '/app/dashboard': {
+      id: '/app/dashboard'
+      path: '/dashboard'
+      fullPath: '/app/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/app/ai': {
+      id: '/app/ai'
+      path: '/ai'
+      fullPath: '/app/ai'
+      preLoaderRoute: typeof AppAiRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+      preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/ai': {
-      id: '/ai'
-      path: '/ai'
-      fullPath: '/ai'
-      preLoaderRoute: typeof AiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/spaces/': {
-      id: '/spaces/'
+    '/app/spaces/': {
+      id: '/app/spaces/'
       path: '/spaces'
-      fullPath: '/spaces'
-      preLoaderRoute: typeof SpacesIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/spaces'
+      preLoaderRoute: typeof AppSpacesIndexRouteImport
+      parentRoute: typeof AppRouteRoute
     }
-    '/spaces/$spaceId': {
-      id: '/spaces/$spaceId'
+    '/app/spaces/$spaceId': {
+      id: '/app/spaces/$spaceId'
       path: '/spaces/$spaceId'
-      fullPath: '/spaces/$spaceId'
-      preLoaderRoute: typeof SpacesSpaceIdRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/app/spaces/$spaceId'
+      preLoaderRoute: typeof AppSpacesSpaceIdRouteImport
+      parentRoute: typeof AppRouteRoute
     }
   }
 }
 
+interface AppRouteRouteChildren {
+  AppAiRoute: typeof AppAiRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppSuccessRoute: typeof AppSuccessRoute
+  AppTodosRoute: typeof AppTodosRoute
+  AppSpacesSpaceIdRoute: typeof AppSpacesSpaceIdRoute
+  AppSpacesIndexRoute: typeof AppSpacesIndexRoute
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppAiRoute: AppAiRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppSuccessRoute: AppSuccessRoute,
+  AppTodosRoute: AppTodosRoute,
+  AppSpacesSpaceIdRoute: AppSpacesSpaceIdRoute,
+  AppSpacesIndexRoute: AppSpacesIndexRoute,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AiRoute: AiRoute,
-  DashboardRoute: DashboardRoute,
-  LoginRoute: LoginRoute,
-  SuccessRoute: SuccessRoute,
-  TodosRoute: TodosRoute,
-  SpacesSpaceIdRoute: SpacesSpaceIdRoute,
-  SpacesIndexRoute: SpacesIndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  authLoginRoute: authLoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

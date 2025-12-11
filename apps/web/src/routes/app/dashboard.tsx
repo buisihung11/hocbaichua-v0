@@ -3,23 +3,9 @@ import { ChartAreaInteractive } from "@/components/chart-area-interactive";
 import { DataTable } from "@/components/data-table";
 import { SectionCards } from "@/components/section-cards";
 import data from "@/data/dashboard/data.json";
-import { getPayment } from "@/functions/get-payment";
-import { getUser } from "@/functions/get-user";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/app/dashboard")({
   component: RouteComponent,
-  beforeLoad: async () => {
-    const session = await getUser();
-    const customerState = await getPayment();
-    return { session, customerState };
-  },
-  loader: () => {
-    // if (!context.session) {
-    //   throw redirect({
-    //     to: "/login",
-    //   });
-    // }
-  },
 });
 
 function RouteComponent() {
