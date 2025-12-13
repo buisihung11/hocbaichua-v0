@@ -2,12 +2,14 @@ import {
   IconCreditCard,
   IconDotsVertical,
   IconLogout,
+  IconMoon,
   IconNotification,
+  IconSun,
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-
+import { useTheme } from "@/components/theme-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -24,12 +26,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Toggle } from "@/components/ui/toggle";
 import { authClient } from "@/lib/auth-client";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
   const session = authClient.useSession();
+  const { theme, setTheme } = useTheme();
 
   const handleLogout = async () => {
     try {
@@ -45,6 +49,10 @@ export function NavUser() {
       toast.error("Failed to log out");
       console.error("Logout error:", error);
     }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   if (session.isPending || !session.data?.user) {
@@ -121,6 +129,22 @@ export function NavUser() {
                 Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <Toggle
+              aria-label="Toggle theme"
+              className="w-full justify-start px-2"
+              onPressedChange={toggleTheme}
+              pressed={theme === "dark"}
+              size="sm"
+              variant="default"
+            >
+              {theme === "dark" ? (
+                <IconMoon className="mr-2 h-4 w-4" />
+              ) : (
+                <IconSun className="mr-2 h-4 w-4" />
+              )}
+              {theme === "dark" ? "Dark" : "Light"}
+            </Toggle>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />

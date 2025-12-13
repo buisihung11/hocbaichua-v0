@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { getUser } from "@/functions/get-user";
 import appCss from "../index.css?url";
@@ -54,13 +55,15 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument() {
   return (
-    <html className="dark" lang="en">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <Outlet />
-        <Toaster richColors />
+        <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <Outlet />
+          <Toaster richColors />
+        </ThemeProvider>
         <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" position="bottom" />
         <Scripts />
