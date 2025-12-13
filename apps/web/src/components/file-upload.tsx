@@ -35,7 +35,6 @@ export function FileUpload({
     trpc.upload.uploadFile.mutationOptions({
       onSuccess: () => {
         toast.success("File uploaded successfully");
-        onUploadComplete?.();
       },
       onError: (error) => {
         toast.error("File upload failed", {
@@ -49,9 +48,17 @@ export function FileUpload({
   const createDocumentMutation = useMutation(
     trpc.upload.createDocumentFromUpload.mutationOptions({
       onSuccess: () => {
+        console.log("Document created from upload");
         queryClient.invalidateQueries({
           queryKey: trpc.upload.listDocumentsBySpace.queryKey({ spaceId }),
         });
+        onUploadComplete?.();
+      },
+      onError: (error) => {
+        toast.error("File was uploaded but failed to create document", {
+          description: error.message,
+        });
+        onUploadError?.(new Error(error.message));
       },
     })
   );

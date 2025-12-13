@@ -58,8 +58,10 @@ export const uploadRouter = router({
           metadata,
         } = input;
 
-        // Create content hash for deduplication
-        const contentHash = Buffer.from(content).toString("base64");
+        // Create content hash for deduplication (includes spaceId to prevent cross-space duplication)
+        const contentHash = Buffer.from(`${spaceId}-${content}`).toString(
+          "base64"
+        );
         const uniqueIdentifierHash = `${spaceId}-${fileKey}`;
 
         const insertedDocument = await db
@@ -82,7 +84,9 @@ export const uploadRouter = router({
           .returning();
 
         if (insertedDocument.length === 0) {
-          throw new Error("No document was inserted");
+          throw new Error(
+            "Failed to insert document. This may be due to duplicate content in this space."
+          );
         }
 
         return {
@@ -91,9 +95,7 @@ export const uploadRouter = router({
         };
       } catch (error) {
         console.error("Failed to create document from upload:", error);
-        throw new Error(
-          `Failed to create document: ${error instanceof Error ? error.message : "Unknown error"}`
-        );
+        throw new Error("Failed to create document");
       }
     }),
 
