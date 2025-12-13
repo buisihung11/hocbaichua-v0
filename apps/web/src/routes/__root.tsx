@@ -10,6 +10,7 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
 import { Toaster } from "@/components/ui/sonner";
+import { getUser } from "@/functions/get-user";
 import appCss from "../index.css?url";
 
 export type RouterAppContext = {
@@ -39,6 +40,16 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
     ],
   }),
   component: RootDocument,
+  beforeLoad: async () => {
+    const session = await getUser();
+    console.log("SESSION IN ROOT ROUTE:", session);
+    // if (session) {
+    //   // redirect to /app/dashboard if user is already logged in
+    //   throw redirect({
+    //     to: "/app/dashboard",
+    //   });
+    // }
+  },
 });
 
 function RootDocument() {

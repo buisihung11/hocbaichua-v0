@@ -26,7 +26,7 @@ export default function SignUpForm({
       await authClient.signIn.social(
         {
           provider: "google",
-          callbackURL: "/dashboard",
+          callbackURL: "/app/dashboard",
         },
         {
           onError: (error) => {
