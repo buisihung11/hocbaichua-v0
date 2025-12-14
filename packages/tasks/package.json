@@ -8,6 +8,9 @@
     "deploy": "trigger deploy"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.699.0",
+    "@dotenvx/dotenvx": "^1.51.2",
+    "@hocbaichua-v0/db": "workspace:*",
     "@trigger.dev/sdk": "^4.0.0"
   },
   "devDependencies": {

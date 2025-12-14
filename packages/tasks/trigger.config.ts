@@ -1,4 +1,8 @@
+import dotenv from "@dotenvx/dotenvx";
 import { defineConfig } from "@trigger.dev/sdk";
+
+// Load environment variables
+dotenv.config({ path: "../../apps/server/.env" });
 
 export default defineConfig({
   project: "proj_lsvsetmpvfcnewfnyzeu",

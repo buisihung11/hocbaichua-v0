@@ -1,5 +1,7 @@
 import { db } from "@hocbaichua-v0/db";
 import { document } from "@hocbaichua-v0/db/schema/space";
+import type { extractDocument } from "@hocbaichua-v0/tasks";
+import { tasks } from "@hocbaichua-v0/tasks/trigger";
 import type { IUploadService } from "@hocbaichua-v0/upload";
 import { createUploadService } from "@hocbaichua-v0/upload";
 import { nanoid } from "nanoid";
@@ -22,13 +24,6 @@ let uploadServiceInstance: IUploadService | null = null;
 
 function getUploadService(): IUploadService {
   if (!uploadServiceInstance) {
-    console.log(
-      "ENV",
-      process.env.R2_ENDPOINT,
-      process.env.R2_ACCESS_KEY_ID,
-      process.env.R2_SECRET_ACCESS_KEY,
-      process.env.R2_BUCKET_NAME
-    );
     uploadServiceInstance = createUploadService({
       provider: "r2",
       endpoint: process.env.R2_ENDPOINT ?? "",
@@ -89,8 +84,22 @@ export const uploadRouter = router({
           );
         }
 
+        const insertedDoc = insertedDocument[0];
+        if (!insertedDoc) {
+          throw new Error("Document was not properly inserted");
+        }
+
+        const documentId = insertedDoc.id;
+
+        // Trigger background extraction task
+        await tasks.trigger<typeof extractDocument>("extract-document", {
+          documentId,
+          fileKey,
+          fileMimeType,
+        });
+
         return {
-          id: insertedDocument[0]?.id,
+          id: documentId,
           success: true,
         };
       } catch (error) {

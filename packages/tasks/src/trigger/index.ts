@@ -1,2 +1,3 @@
 // Export tasks
-export * from "./example";
+/** biome-ignore-all lint/performance/noBarrelFile: <No valid> */
+export * from "./extract-document";
