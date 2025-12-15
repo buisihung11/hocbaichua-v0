@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import {
   BarChart3,
@@ -8,11 +8,17 @@ import {
   FileText,
   Lightbulb,
   Plus,
+  RefreshCw,
   Search,
   UploadIcon,
 } from "lucide-react";
 import { useRef, useState } from "react";
 import type { ImperativePanelHandle } from "react-resizable-panels";
+import { toast } from "sonner";
+import {
+  type DocumentStatus,
+  DocumentStatusBadge,
+} from "@/components/document-status-badge";
 import { FileUpload } from "@/components/file-upload";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,6 +63,7 @@ export const Route = createFileRoute("/app/spaces/$spaceId")({
 function SpaceDetailRoute() {
   const { spaceId } = Route.useParams();
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const leftPanelRef = useRef<ImperativePanelHandle>(null);
   const rightPanelRef = useRef<ImperativePanelHandle>(null);
   const [isLeftCollapsed, setIsLeftCollapsed] = useState(false);
@@ -73,6 +80,26 @@ function SpaceDetailRoute() {
     })
   );
 
+  const syncMutation = useMutation(
+    trpc.upload.syncUploadedDocuments.mutationOptions({
+      onSuccess: (data) => {
+        // Invalidate queries to refresh document list
+        if (data.processedCount === 0) {
+          toast.info("No new documents to sync");
+          return;
+        }
+        toast.success(`Synced ${data.processedCount} documents successfully`);
+        queryClient.invalidateQueries({
+          queryKey: trpc.upload.listDocumentsBySpace.queryKey({ spaceId }),
+        });
+      },
+    })
+  );
+
+  const handleSync = () => {
+    syncMutation.mutate({ spaceId });
+  };
+
   const sources =
     documents?.map((doc) => ({
       id: doc.id,
@@ -80,6 +107,7 @@ function SpaceDetailRoute() {
       icon: <FileText className="h-4 w-4 text-red-500" />,
       selected: false,
       fileUrl: doc.fileUrl,
+      processingStatus: doc.processingStatus as DocumentStatus,
     })) ?? [];
 
   if (isLoadingSpace) {
@@ -180,13 +208,34 @@ function SpaceDetailRoute() {
                 <div className="space-y-4 p-4">
                   <div className="flex items-center justify-between">
                     <h2 className="font-semibold text-lg">Sources</h2>
-                    <Button
-                      onClick={() => leftPanelRef.current?.collapse()}
-                      size="icon"
-                      variant="ghost"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            aria-label="Sync uploaded documents"
+                            disabled={syncMutation.isPending}
+                            onClick={handleSync}
+                            size="icon"
+                            variant="ghost"
+                          >
+                            <RefreshCw
+                              className={`h-4 w-4 ${
+                                syncMutation.isPending ? "animate-spin" : ""
+                              }`}
+                            />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>Sync uploaded documents</TooltipContent>
+                      </Tooltip>
+                      <Button
+                        aria-label="Collapse sidebar"
+                        onClick={() => leftPanelRef.current?.collapse()}
+                        size="icon"
+                        variant="ghost"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
 
                   <DialogTrigger asChild>
@@ -232,9 +281,15 @@ function SpaceDetailRoute() {
                         >
                           <div className="flex items-start gap-2">
                             {source.icon}
-                            <p className="line-clamp-2 flex-1 text-sm">
-                              {source.title}
-                            </p>
+                            <div className="flex-1 space-y-1">
+                              <p className="line-clamp-2 text-sm">
+                                {source.title}
+                              </p>
+                              <DocumentStatusBadge
+                                size="sm"
+                                status={source.processingStatus}
+                              />
+                            </div>
                           </div>
                         </Card>
                       ))}

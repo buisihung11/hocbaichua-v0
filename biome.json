@@ -20,7 +20,8 @@
       "!**/.svelte-kit",
       "!**/wrangler.jsonc",
       "!**/.source",
-      "!**/apps/**/routeTree.gen.ts"
+      "!**/apps/**/routeTree.gen.ts",
+      "!*.lock"
     ]
   },
   "extends": ["ultracite/core", "ultracite/react"],
@@ -29,7 +30,7 @@
       "performance": {
         "noNamespaceImport": "warn",
         "noDynamicNamespaceImportAccess": "warn",
-        "noBarrelFile": "warn"
+        "noBarrelFile": "info"
       },
       "style": {
         "useFilenamingConvention": "off",

@@ -22,6 +22,20 @@
       "when": 1763796214194,
       "tag": "0002_eager_eternity",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765721731592,
+      "tag": "0003_nasty_mathemanic",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765724803785,
+      "tag": "0004_nosy_shard",
+      "breakpoints": true
     }
   ]
 }

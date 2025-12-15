@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm/relations";
 import { account, session, user } from "./auth";
-import { document, space } from "./space";
+import { document, documentChunk, space } from "./space";
 
 export const sessionRelations = relations(session, ({ one }) => ({
   user: one(user, {
@@ -30,9 +30,17 @@ export const spaceRelations = relations(space, ({ one, many }) => ({
   documents: many(document),
 }));
 
-export const documentRelations = relations(document, ({ one }) => ({
+export const documentRelations = relations(document, ({ one, many }) => ({
   space: one(space, {
     fields: [document.spaceId],
     references: [space.id],
+  }),
+  chunks: many(documentChunk),
+}));
+
+export const documentChunkRelations = relations(documentChunk, ({ one }) => ({
+  document: one(document, {
+    fields: [documentChunk.documentId],
+    references: [document.id],
   }),
 }));
