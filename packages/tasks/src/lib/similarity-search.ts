@@ -7,8 +7,8 @@
  */
 
 import { db } from "@hocbaichua-v0/db";
+import { embeddings } from "@hocbaichua-v0/llm";
 import { sql } from "drizzle-orm";
-import { embedQuery } from "./embeddings";
 
 /**
  * Result from similarity search
@@ -74,7 +74,7 @@ export async function similaritySearch(
   } = options;
 
   // Generate embedding for the query
-  const queryEmbedding = await embedQuery(query);
+  const queryEmbedding = await embeddings.embedQuery(query);
 
   // Build the vector string for pgvector
   const vectorString = `[${queryEmbedding.join(",")}]`;

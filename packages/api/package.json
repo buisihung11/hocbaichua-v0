@@ -21,6 +21,8 @@
     "@hocbaichua-v0/auth": "workspace:*",
     "@hocbaichua-v0/db": "workspace:*",
     "@hocbaichua-v0/upload": "workspace:*",
+    "@hocbaichua-v0/llm": "workspace:*",
+    "@langchain/core": "^1.1.5",
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "ai": "catalog:",

@@ -30,11 +30,13 @@
       "performance": {
         "noNamespaceImport": "warn",
         "noDynamicNamespaceImportAccess": "warn",
-        "noBarrelFile": "info"
+        "noBarrelFile": "off"
       },
       "style": {
         "useFilenamingConvention": "off",
-        "useBlockStatements": "off"
+        "useBlockStatements": "off",
+        "noEnum": "off",
+        "useConsistentTypeDefinitions": "off"
       },
       "security": {
         "noDangerouslySetInnerHtml": "warn"
@@ -43,7 +45,9 @@
         "noShadow": "warn"
       },
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "useAwait": "info",
+        "noEmptyBlockStatements": "warn"
       }
     }
   }

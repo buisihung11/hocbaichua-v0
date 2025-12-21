@@ -15,10 +15,16 @@ export const db = drizzle(client, {
   schema,
 });
 
-// biome-ignore lint/performance/noBarrelFile: Re-exports are intentional for this shared db package
+export type { IncludeRelation, InferResultType } from "./helpers/schema-type";
+export { citation } from "./schema/citation";
+export { conversation } from "./schema/conversation";
+export { message, messageRoleEnum } from "./schema/message";
 export {
+  citationRelations,
+  conversationRelations,
   documentChunkRelations,
   documentRelations,
+  messageRelations,
   spaceRelations,
 } from "./schema/relations";
 export {

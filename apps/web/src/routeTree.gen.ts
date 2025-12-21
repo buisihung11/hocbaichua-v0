@@ -16,7 +16,9 @@ import { Route as AppDashboardRouteImport } from './routes/app/dashboard'
 import { Route as AppAiRouteImport } from './routes/app/ai'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as AppSpacesIndexRouteImport } from './routes/app/spaces/index'
-import { Route as AppSpacesSpaceIdRouteImport } from './routes/app/spaces/$spaceId'
+import { Route as AppSpacesSpaceIdRouteRouteImport } from './routes/app/spaces/$spaceId/route'
+import { Route as AppSpacesSpaceIdIndexRouteImport } from './routes/app/spaces/$spaceId/index'
+import { Route as AppSpacesSpaceIdConversationIdRouteImport } from './routes/app/spaces/$spaceId/$conversationId'
 
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/app',
@@ -53,11 +55,22 @@ const AppSpacesIndexRoute = AppSpacesIndexRouteImport.update({
   path: '/spaces/',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppSpacesSpaceIdRoute = AppSpacesSpaceIdRouteImport.update({
+const AppSpacesSpaceIdRouteRoute = AppSpacesSpaceIdRouteRouteImport.update({
   id: '/spaces/$spaceId',
   path: '/spaces/$spaceId',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppSpacesSpaceIdIndexRoute = AppSpacesSpaceIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppSpacesSpaceIdRouteRoute,
+} as any)
+const AppSpacesSpaceIdConversationIdRoute =
+  AppSpacesSpaceIdConversationIdRouteImport.update({
+    id: '/$conversationId',
+    path: '/$conversationId',
+    getParentRoute: () => AppSpacesSpaceIdRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/app': typeof AppRouteRouteWithChildren
@@ -66,8 +79,10 @@ export interface FileRoutesByFullPath {
   '/app/dashboard': typeof AppDashboardRoute
   '/app/success': typeof AppSuccessRoute
   '/app/todos': typeof AppTodosRoute
-  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRoute
+  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRouteRouteWithChildren
   '/app/spaces': typeof AppSpacesIndexRoute
+  '/app/spaces/$spaceId/$conversationId': typeof AppSpacesSpaceIdConversationIdRoute
+  '/app/spaces/$spaceId/': typeof AppSpacesSpaceIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/app': typeof AppRouteRouteWithChildren
@@ -76,8 +91,9 @@ export interface FileRoutesByTo {
   '/app/dashboard': typeof AppDashboardRoute
   '/app/success': typeof AppSuccessRoute
   '/app/todos': typeof AppTodosRoute
-  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRoute
   '/app/spaces': typeof AppSpacesIndexRoute
+  '/app/spaces/$spaceId/$conversationId': typeof AppSpacesSpaceIdConversationIdRoute
+  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,8 +103,10 @@ export interface FileRoutesById {
   '/app/dashboard': typeof AppDashboardRoute
   '/app/success': typeof AppSuccessRoute
   '/app/todos': typeof AppTodosRoute
-  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRoute
+  '/app/spaces/$spaceId': typeof AppSpacesSpaceIdRouteRouteWithChildren
   '/app/spaces/': typeof AppSpacesIndexRoute
+  '/app/spaces/$spaceId/$conversationId': typeof AppSpacesSpaceIdConversationIdRoute
+  '/app/spaces/$spaceId/': typeof AppSpacesSpaceIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +119,8 @@ export interface FileRouteTypes {
     | '/app/todos'
     | '/app/spaces/$spaceId'
     | '/app/spaces'
+    | '/app/spaces/$spaceId/$conversationId'
+    | '/app/spaces/$spaceId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/app'
@@ -109,8 +129,9 @@ export interface FileRouteTypes {
     | '/app/dashboard'
     | '/app/success'
     | '/app/todos'
-    | '/app/spaces/$spaceId'
     | '/app/spaces'
+    | '/app/spaces/$spaceId/$conversationId'
+    | '/app/spaces/$spaceId'
   id:
     | '__root__'
     | '/app'
@@ -121,6 +142,8 @@ export interface FileRouteTypes {
     | '/app/todos'
     | '/app/spaces/$spaceId'
     | '/app/spaces/'
+    | '/app/spaces/$spaceId/$conversationId'
+    | '/app/spaces/$spaceId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -183,18 +206,47 @@ declare module '@tanstack/react-router' {
       id: '/app/spaces/$spaceId'
       path: '/spaces/$spaceId'
       fullPath: '/app/spaces/$spaceId'
-      preLoaderRoute: typeof AppSpacesSpaceIdRouteImport
+      preLoaderRoute: typeof AppSpacesSpaceIdRouteRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/app/spaces/$spaceId/': {
+      id: '/app/spaces/$spaceId/'
+      path: '/'
+      fullPath: '/app/spaces/$spaceId/'
+      preLoaderRoute: typeof AppSpacesSpaceIdIndexRouteImport
+      parentRoute: typeof AppSpacesSpaceIdRouteRoute
+    }
+    '/app/spaces/$spaceId/$conversationId': {
+      id: '/app/spaces/$spaceId/$conversationId'
+      path: '/$conversationId'
+      fullPath: '/app/spaces/$spaceId/$conversationId'
+      preLoaderRoute: typeof AppSpacesSpaceIdConversationIdRouteImport
+      parentRoute: typeof AppSpacesSpaceIdRouteRoute
     }
   }
 }
+
+interface AppSpacesSpaceIdRouteRouteChildren {
+  AppSpacesSpaceIdConversationIdRoute: typeof AppSpacesSpaceIdConversationIdRoute
+  AppSpacesSpaceIdIndexRoute: typeof AppSpacesSpaceIdIndexRoute
+}
+
+const AppSpacesSpaceIdRouteRouteChildren: AppSpacesSpaceIdRouteRouteChildren = {
+  AppSpacesSpaceIdConversationIdRoute: AppSpacesSpaceIdConversationIdRoute,
+  AppSpacesSpaceIdIndexRoute: AppSpacesSpaceIdIndexRoute,
+}
+
+const AppSpacesSpaceIdRouteRouteWithChildren =
+  AppSpacesSpaceIdRouteRoute._addFileChildren(
+    AppSpacesSpaceIdRouteRouteChildren,
+  )
 
 interface AppRouteRouteChildren {
   AppAiRoute: typeof AppAiRoute
   AppDashboardRoute: typeof AppDashboardRoute
   AppSuccessRoute: typeof AppSuccessRoute
   AppTodosRoute: typeof AppTodosRoute
-  AppSpacesSpaceIdRoute: typeof AppSpacesSpaceIdRoute
+  AppSpacesSpaceIdRouteRoute: typeof AppSpacesSpaceIdRouteRouteWithChildren
   AppSpacesIndexRoute: typeof AppSpacesIndexRoute
 }
 
@@ -203,7 +255,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppSuccessRoute: AppSuccessRoute,
   AppTodosRoute: AppTodosRoute,
-  AppSpacesSpaceIdRoute: AppSpacesSpaceIdRoute,
+  AppSpacesSpaceIdRouteRoute: AppSpacesSpaceIdRouteRouteWithChildren,
   AppSpacesIndexRoute: AppSpacesIndexRoute,
 }
 

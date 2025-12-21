@@ -1,23 +1,16 @@
-/**
- * Embed Chunks Task
- * T027-T032: Generates vector embeddings for document chunks
- *
- * This task:
- * 1. Updates document status to EMBEDDING
- * 2. Retrieves chunks without embeddings
- * 3. Generates embeddings using Google AI
- * 4. Updates chunk records with embedding vectors
- * 5. Sets document status to READY
- */
-
 import { db, document, documentChunk } from "@hocbaichua-v0/db";
+import {
+  EMBEDDING_MODELS,
+  embeddings as embeddingService,
+} from "@hocbaichua-v0/llm";
 import { AbortTaskRunError, task } from "@trigger.dev/sdk";
 import { and, eq, isNull } from "drizzle-orm";
-import {
-  EMBEDDING_CONFIG,
-  embedTextsInBatches,
-  isValidEmbedding,
-} from "../lib/embeddings";
+
+// Embedding configuration
+const EMBEDDING_CONFIG = {
+  batchSize: EMBEDDING_MODELS.OPENAI_SMALL.dimensions === 1536 ? 100 : 50,
+  dimensions: EMBEDDING_MODELS.OPENAI_SMALL.dimensions,
+};
 
 // Type for chunk from database
 type DocumentChunkRecord = {
@@ -79,7 +72,7 @@ async function updateChunksWithEmbeddings(
       continue;
     }
 
-    if (!isValidEmbedding(embedding)) {
+    if (!embeddingService.isValidEmbedding(embedding)) {
       console.warn(`[Embed] Invalid embedding for chunk ${chunk.id}`);
       continue;
     }
@@ -118,7 +111,7 @@ async function processChunks(
   console.log(
     `[Embed] Generating embeddings (batch size: ${EMBEDDING_CONFIG.batchSize})...`
   );
-  const embeddings = await embedTextsInBatches(
+  const embeddings = await embeddingService.embedTextsInBatches(
     texts,
     EMBEDDING_CONFIG.batchSize,
     200

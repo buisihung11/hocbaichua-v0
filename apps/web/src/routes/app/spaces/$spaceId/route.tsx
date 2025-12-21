@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import {
   BarChart3,
-  BookOpen,
   ChevronLeft,
   ChevronRight,
   FileText,
@@ -20,7 +19,6 @@ import {
   DocumentStatusBadge,
 } from "@/components/document-status-badge";
 import { FileUpload } from "@/components/file-upload";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -317,73 +315,7 @@ function SpaceDetailRoute() {
       <ResizableHandle withHandle />
 
       {/* Main Content Area */}
-      <ResizablePanel defaultSize={55} minSize={40}>
-        <div className="flex h-full flex-col">
-          <ScrollArea className="flex-1">
-            <div className="mx-auto max-w-4xl space-y-8 px-6 py-8">
-              {/* Main Title */}
-              <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="rounded-lg bg-amber-500/10 p-3">
-                    <BookOpen className="h-6 w-6 text-amber-500" />
-                  </div>
-                  <div className="flex-1">
-                    <h1 className="mb-2 font-bold text-3xl">{space.name}</h1>
-                    {space.description && (
-                      <p className="mb-2 text-muted-foreground">
-                        {space.description}
-                      </p>
-                    )}
-                    <Badge variant="secondary">{sources.length} sources</Badge>
-                  </div>
-                </div>
-
-                {sources.length > 0 ? (
-                  <p className="text-muted-foreground leading-relaxed">
-                    Your uploaded documents will appear in the left sidebar.
-                    Start by selecting a source to begin your research.
-                  </p>
-                ) : (
-                  <Card className="p-8 text-center">
-                    <UploadIcon className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                    <h3 className="mb-2 font-semibold text-lg">
-                      No documents yet
-                    </h3>
-                    <p className="mb-4 text-muted-foreground text-sm">
-                      Upload your first document to start researching in this
-                      space
-                    </p>
-                    <Dialog
-                      onOpenChange={setIsUploadDialogOpen}
-                      open={isUploadDialogOpen}
-                    >
-                      <DialogTrigger asChild>
-                        <Button>
-                          <UploadIcon className="mr-2 h-4 w-4" />
-                          Upload Documents
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle>Upload Documents</DialogTitle>
-                          <DialogDescription>
-                            Upload documents to add them as sources for your
-                            research.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <FileUpload
-                          onUploadComplete={() => setIsUploadDialogOpen(false)}
-                          spaceId={spaceId}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                  </Card>
-                )}
-              </div>
-            </div>
-          </ScrollArea>
-        </div>
-      </ResizablePanel>
+      <Outlet />
 
       <ResizableHandle withHandle />
 
